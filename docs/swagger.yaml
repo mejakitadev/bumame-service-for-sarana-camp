@@ -1,0 +1,499 @@
+basePath: /
+definitions:
+  controller.RequestLogin:
+    properties:
+      email:
+        example: admin@bumame.com
+        type: string
+      password:
+        example: "123456"
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  web.ErrorResponse:
+    properties:
+      messages:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+    type: object
+  web.RequestB2BProduct:
+    properties:
+      examination_checklist:
+        example:
+        - injection
+        - phlebotomy
+        items:
+          type: string
+        type: array
+      id:
+        default: 0
+        example: 1
+        type: integer
+      name:
+        example: Product Name
+        type: string
+      price:
+        example: 10000000
+        type: integer
+    required:
+    - name
+    - price
+    type: object
+  web.ResponseStandard:
+    properties:
+      data: {}
+      errors:
+        items:
+          $ref: '#/definitions/web.ErrorResponse'
+        type: array
+      fulfilled:
+        type: integer
+      message:
+        type: string
+      pagination:
+        description: |-
+          Meta       any `json:"meta"`
+          JsonApi    any `json:"jsonapi"`
+          Links      any `json:"links"`
+          Included   any `json:"included"`
+          Self       any `json:"self"`
+          Related    any `json:"related"`
+      statusCode:
+        type: integer
+    type: object
+host: localhost:8200
+info:
+  contact: {}
+  description: This is a sample server with v1 and v2 endpoints.
+  title: Sarana Boilerplate API
+  version: "2.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controller.RequestLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Login
+      tags:
+      - auth
+  /auth/read-token:
+    get:
+      consumes:
+      - application/json
+      description: Read Token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Read Token
+      tags:
+      - auth
+  /b2b-product:
+    get:
+      consumes:
+      - application/json
+      description: Get all b2b products
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - in: query
+        name: role
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Get all b2b products
+      tags:
+      - b2b-product
+    post:
+      consumes:
+      - application/json
+      description: Create b2b product
+      parameters:
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/web.RequestB2BProduct'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Create b2b product
+      tags:
+      - b2b-product
+  /b2b-product/{b2b_product_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete b2b product
+      parameters:
+      - description: B2B Product ID
+        in: path
+        name: b2b_product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Delete b2b product
+      tags:
+      - b2b-product
+    get:
+      consumes:
+      - application/json
+      description: Get b2b product by ID
+      parameters:
+      - description: B2B Product ID
+        in: path
+        name: b2b_product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Get b2b product by ID
+      tags:
+      - b2b-product
+    put:
+      consumes:
+      - application/json
+      description: Update b2b product
+      parameters:
+      - description: B2B Product ID
+        in: path
+        name: b2b_product_id
+        required: true
+        type: string
+      - description: Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/web.RequestB2BProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Update b2b product
+      tags:
+      - b2b-product
+  /b2b-product/bulk-update:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Bulk update b2b products
+      parameters:
+      - description: "CSV File Structure:\n Header: id,name,price,vital-signs,visus,physical-test,injection,phlebotomy,specimen-mandiri,pap-smear,rontgen,ekg,audiometri,spirometri,treadmill,usg-abdomen,usg-mammae;\n
+          Example Value: 1,MCU Basic,10000,1,1,1,1,1,1,1,1,1,1,1,1,1,1 \n Note: if
+          you want to create new product, you can leave the id as empty, else if you
+          want to update the product, you can fill the id with the product id"
+        in: formData
+        name: csv_file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Bulk update b2b products
+      tags:
+      - b2b-product
+  /b2b-product/generate-slugs:
+    post:
+      consumes:
+      - application/json
+      description: Generate slugs for products where slug is null
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Generate slugs for products
+      tags:
+      - b2b-product
+  /v2/b2b-product:
+    get:
+      consumes:
+      - application/json
+      description: Get all b2b products with pagination
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Get all b2b products v2
+      tags:
+      - b2b-product-v2
+    post:
+      consumes:
+      - application/json
+      description: Create new b2b product
+      parameters:
+      - description: Product Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/web.RequestB2BProduct'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Create b2b product v2
+      tags:
+      - b2b-product-v2
+  /v2/b2b-product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete existing b2b product
+      parameters:
+      - description: B2B Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Delete b2b product v2
+      tags:
+      - b2b-product-v2
+    get:
+      consumes:
+      - application/json
+      description: Get b2b product by ID
+      parameters:
+      - description: B2B Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Get b2b product by ID v2
+      tags:
+      - b2b-product-v2
+    put:
+      consumes:
+      - application/json
+      description: Update existing b2b product
+      parameters:
+      - description: B2B Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/web.RequestB2BProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/web.ResponseStandard'
+      summary: Update b2b product v2
+      tags:
+      - b2b-product-v2
+swagger: "2.0"
