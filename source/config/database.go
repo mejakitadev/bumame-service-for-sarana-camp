@@ -11,12 +11,13 @@ import (
 )
 
 func NewDatabase() *gorm.DB {
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai search_path=%s",
 		os.Getenv(env.DB_HOST),
 		os.Getenv(env.DB_USER),
 		os.Getenv(env.DB_PASSWORD),
 		os.Getenv(env.DB_NAME),
 		os.Getenv(env.DB_PORT),
+		os.Getenv(env.DB_SCHEMA),
 	)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -31,6 +32,9 @@ func NewDatabase() *gorm.DB {
 	return db
 }
 func MigrateTable(db *gorm.DB) {
+	// Create schema if not exists
+	db.Exec("CREATE SCHEMA IF NOT EXISTS " + os.Getenv(env.DB_SCHEMA))
+
 	enableSeed := false
 	// db.Exec("DROP TABLE IF EXISTS b2b_bumame_appointment_manpower")
 	// db.Exec("DROP TABLE IF EXISTS b2b_bumame_appointment_patient_examination_checklist")

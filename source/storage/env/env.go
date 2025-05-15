@@ -105,6 +105,8 @@ const (
 	GOOGLE_MAP_KEY = "GOOGLE_MAP_KEY"
 
 	BASE_URL_WEB_NAKES = "BASE_URL_WEB_NAKES"
+
+	DB_SCHEMA = "DB_SCHEMA"
 )
 
 func InitEnv() {
