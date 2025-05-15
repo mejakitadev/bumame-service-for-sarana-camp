@@ -1,8 +1,3 @@
-// @title			Sarana Boilerplate API
-// @version		2.0
-// @description	This is a sample server with v1 and v2 endpoints.
-// @host			localhost:8200
-// @BasePath		/
 package main
 
 import (
